@@ -25,7 +25,7 @@ public class ShopRepositoryTest {
     }
 
     @Test
-    public void shouldThrowException() {
+    public void shouldThrowNotFoundException() {
         Product product1 = new Product(1, "Хлеб", 100);
         Product product2 = new Product(2, "Масло", 200);
 
@@ -34,6 +34,35 @@ public class ShopRepositoryTest {
         repo.add(product2);
         Assertions.assertThrows(NotFoundException.class, () -> {
             repo.removeById(3);
+        });
+    }
+    @Test
+    public void shouldAddNewProduct() {
+        Product product1 = new Product(1, "Хлеб", 100);
+        Product product2 = new Product(2, "Масло", 200);
+
+        ShopRepository repo = new ShopRepository();
+        repo.add(product1);
+        repo.add(product2);
+
+        Product[] expected = {product1, product2};
+        Product[] actual = repo.findAll();
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldThrowAlreadyExistsException() {
+        Product product1 = new Product(1, "Хлеб", 100);
+        Product product2 = new Product(2, "Масло", 200);
+        Product duplicateProduct = new Product(1, "Молоко", 300);
+
+        ShopRepository repo = new ShopRepository();
+        repo.add(product1);
+        repo.add(product2);
+
+        Assertions.assertThrows(AlreadyExistsException.class, () -> {
+            repo.add(duplicateProduct);
         });
     }
 }

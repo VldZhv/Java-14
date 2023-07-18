@@ -10,7 +10,10 @@ public class ShopRepository {
         return tmp;
     }
 
-    public void add(Product product) {
+    public void add(Product product) throws AlreadyExistsException {
+        if (findById(product.getId()) != null) {
+            throw new AlreadyExistsException("Element with ID " + product.getId() + " already exists.");
+        }
         products = addToArray(products, product);
     }
 
